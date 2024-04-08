@@ -9,6 +9,7 @@ RUN NODE_ENV=production npm run build:prod
 FROM node:10-slim as runner
 COPY --from=builder /opt/api/package.json ./package.json
 COPY --from=builder /opt/api/package-lock.json ./package-lock.json
+COPY --from=builder /opt/api/static ./static
 COPY --from=builder /opt/api/dist .
 ARG BUILD
 ENV BUILD $BUILD
