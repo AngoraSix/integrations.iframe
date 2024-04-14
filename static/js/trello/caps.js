@@ -1,6 +1,6 @@
 var t = TrelloPowerUp.iframe();
 
-window.estimate.addEventListener('submit', function (event) {
+window.caps.addEventListener('submit', function (event) {
   event.preventDefault();
   return t
     .set('card', 'shared', 'caps', window.capsInput.value)
