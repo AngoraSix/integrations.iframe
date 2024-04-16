@@ -57,10 +57,10 @@ t.render(function () {
   return t
     .get('card', 'shared', 'capsParams')
     .then(function (capsParams) {
-      effortInput.value = capsParams.effort;
-      complexityInput.value = capsParams.complexity;
-      industryInput.value = capsParams.industry;
-      capsOutput.value = capsParams.caps;
+      effortInput.value = capsParams?.effort;
+      complexityInput.value = capsParams?.complexity;
+      industryInput.value = capsParams?.industry;
+      capsOutput.value = capsParams?.caps;
     })
     .then(function () {
       t.sizeTo('#caps').done();

@@ -20,11 +20,24 @@ TrelloPowerUp.initialize({
   },
   'card-badges': function (t, options) {
     return t.get('card', 'shared', 'capsParams').then(function (capsParams) {
-      const capsValue = capsParams.caps;
+      const capsValue = capsParams?.caps;
       return [
         {
           icon: capsValue ? BLACK_ICON : WHITE_ICON,
-          text: capsParams.caps || 'No Caps',
+          text: capsValue || 'No Caps',
+          color: capsValue ? null : 'red',
+        },
+      ];
+    });
+  },
+  'card-detail-badges': function (t, options) {
+    return t.get('card', 'shared', 'capsParams').then(function (capsParams) {
+      const capsValue = capsParams?.caps;
+      return [
+        {
+          title: 'Caps',
+          icon: capsValue ? BLACK_ICON : WHITE_ICON,
+          text: capsValue || 'No Caps!',
           color: capsValue ? null : 'red',
         },
       ];
