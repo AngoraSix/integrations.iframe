@@ -8,6 +8,7 @@
     "build:prod": "webpack --mode production",
     "docker": "docker build -t angorasix/integrations.iframe .",
     "start": "webpack && node dist/app.js",
+    "start:local:win": "webpack && node dist/app.js",
     "start:prod": "NODE_ENV=production webpack --mode production && node dist/app.js",
     "dev": "npm run build && npm-run-all --parallel dev:watch dev:serve",
     "dev:watch": "webpack -d --progress --watch",
