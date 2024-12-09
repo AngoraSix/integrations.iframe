@@ -1,0 +1,20 @@
+{
+    "base": {
+        "title": "AngoraSix Iframe Integrations Service",
+        "description": "AngoraSix service for iframe integrations"
+    },
+    "trello": {
+        "base": {
+            "title": "AngoraSix Trello Power-Up",
+            "description": "AngoraSix Integration resources for Trello."
+        },
+        "caps": {
+            "title": "Popup Interaction",
+            "description": "Interact with your card data here.",
+            "form": {
+                "effort": "Effort (in hours)",
+                "submit": "Submit Changes"
+            }
+        }
+    }
+}

@@ -2,68 +2,30 @@
   "name": "integrations.iframe",
   "version": "0.3.0",
   "description": "Integrations with other third-party apps using iframes",
-  "main": "webpack.config.js",
+  "private": true,
   "scripts": {
-    "build": "webpack",
-    "build:prod": "webpack --mode production",
-    "docker": "docker build -t angorasix/integrations.iframe .",
-    "start": "webpack && node dist/app.js",
-    "start:local:win": "webpack && node dist/app.js",
-    "start:prod": "NODE_ENV=production webpack --mode production && node dist/app.js",
-    "dev": "npm run build && npm-run-all --parallel dev:watch dev:serve",
-    "dev:watch": "webpack -d --progress --watch",
-    "dev:serve": "babel-watch dist/app.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build:dev": "npm run build && node --inspect=5858 dist/app",
-    "debug": "node --nolazy --inspect-brk=9229 dist/app.js"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+ssh://git@github.com/AngoraSix/integrations.iframe.git"
-  },
-  "keywords": [
-    "integrations",
-    "iframe"
-  ],
-  "author": "Ger Roza",
-  "license": "GPL-3.0",
-  "bugs": {
-    "url": "https://github.com/AngoraSix/integrations.iframe/issues"
-  },
-  "homepage": "https://github.com/AngoraSix/integrations.iframe#readme",
   "dependencies": {
-    "chalk": "^4.1.0",
-    "cors": "^2.8.5",
-    "dotenv": "^10.0.0",
-    "express": "^4.17.1",
-    "morgan": "^1.10.0",
-    "pem": "^1.15.1"
+    "@emotion/cache": "^11.14.0",
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0",
+    "@mui/material": "^6.1.10",
+    "@mui/material-nextjs": "^6.1.9",
+    "next": "15.0.4",
+    "next-intl": "^3.26.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.15.0",
-    "@babel/plugin-syntax-object-rest-spread": "^7.8.3",
-    "@babel/polyfill": "^7.7.0",
-    "@babel/preset-env": "^7.15.0",
-    "babel-loader": "^8.2.3",
-    "babel-plugin-transform-class-properties": "^6.24.1",
-    "eslint": "^7.32.0",
-    "eslint-config-airbnb": "^18.2.1",
-    "eslint-plugin-import": "^2.25.3",
-    "eslint-plugin-jsx-a11y": "^6.4.1",
-    "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-promise": "^5.1.0",
-    "eslint-plugin-react": "^7.25.1",
-    "eslint-plugin-standard": "^5.0.0",
-    "husky": "^7.0.2",
-    "prettier": "^2.4.1",
-    "standard": "^16.0.3",
-    "webpack": "^4.46.0",
-    "webpack-cli": "^4.9.1",
-    "yaml-import-loader": "^1.3.6"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "pretty-quick --staged"
-    }
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^8",
+    "eslint-config-next": "15.0.4",
+    "typescript": "^5"
   }
 }
