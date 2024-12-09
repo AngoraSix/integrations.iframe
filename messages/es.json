@@ -13,7 +13,15 @@
             "description": "AngoraSix Trello Estimación de tarea",
             "form": {
                 "effort": "Esfuerzo (en horas)",
-                "submit": "Guardar"
+                "complexity": "Complejidad (1-5)",
+                "resultingCaps": "Chapitas resultantes",
+                "modifier": "Modificador",
+                "submit": "Guardar",
+                "modifiers": {
+                    "SOFTWARE": "Software",
+                    "WEB_DESIGN": "Diseño Web",
+                    "BUSINESS_ANALYSIS": "Análisis de Negocios"
+                }
             }
         }
     }

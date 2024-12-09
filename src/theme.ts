@@ -19,7 +19,7 @@ const theme = createTheme({
   },
   typography: {
     fontFamily: ['var(--font-ruluko)', 'Roboto', 'Helvetica', 'Arial', 'sans-serif'].join(','),
-    fontSize: 18,
+    fontSize: 14,
     h1: {
       fontFamily: ['var(--font-zcool)', 'Roboto', 'Helvetica', 'Arial', 'sans-serif'].join(
         ','

@@ -13,7 +13,15 @@
             "description": "Interact with your card data here.",
             "form": {
                 "effort": "Effort (in hours)",
-                "submit": "Submit Changes"
+                "complexity": "Complexity (1-5)",
+                "resultingCaps": "Resulting Caps",
+                "modifier": "Modifier",
+                "submit": "Submit Changes",
+                "modifiers": {
+                    "SOFTWARE": "Software",
+                    "WEB_DESIGN": "Web Design",
+                    "BUSINESS_ANALYSIS": "Business Analysis"
+                }
             }
         }
     }
