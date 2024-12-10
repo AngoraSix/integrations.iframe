@@ -17,6 +17,7 @@ const nextConfig: NextConfig = {
       },
     ];
   },
+  output: 'standalone',
   typescript: {
     ignoreBuildErrors: true, // TODO re-enable this
   },
