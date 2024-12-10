@@ -1,14 +1,24 @@
+.Trello__Caps.Container{
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
 .Trello__Caps.Container .Form {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 100%;
-    width: 100%;
-    padding: 0 20px;
+    padding: 0 10px;
 }
 
 .Trello__Caps.Container .InputField {
     margin: 10px 20px;
+    width: 100%;
+}
+
+.Trello__Caps.Container .InputField .Input {
     width: 100%;
 }

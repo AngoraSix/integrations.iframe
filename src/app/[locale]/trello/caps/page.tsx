@@ -1,7 +1,5 @@
 'use client';
 
-import { FieldNumberInput } from '@/components/mui-treasury/field-number-input';
-import { Button, Container, FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material';
 import { useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
 import './caps.css';
@@ -53,11 +51,7 @@ export default function TrelloCapsPage() {
         }
     }, []);
 
-    const onNumberInputChange = (fieldName: string) => (value: number) => {
-        setCardState({ ...cardState, [fieldName]: value });
-    };
-
-    const onStringInputChange = (fieldName: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
+    const onInputChange = (fieldName: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
         const inputValue = e.target?.value;
         setCardState({ ...cardState, [fieldName]: inputValue });
     };
@@ -83,75 +77,72 @@ export default function TrelloCapsPage() {
     };
 
     return (
-        <Container id='caps' className='Trello__Caps Container' maxWidth="sm">
+        <div id='caps' className='Trello__Caps Container' maxWidth="sm">
             <form className='Form' id="caps" onSubmit={onSubmit}>
-                <FormControl fullWidth key="effort" id="effort" className="InputField Effort">
-                    <InputLabel
-                        className="Label" id="effort-label">{t('caps.form.effort')}</InputLabel>
-                    <FieldNumberInput
+                <div key="effort" id="effort" className="InputField Effort">
+                    <p
+                        className="Label" id="effort-label">{t('caps.form.effort')}</p>
+                    <input
+                        type="number"
                         className="Input"
                         id="effort"
-                        fullWidth
                         value={cardState.effort}
-                        onChange={onNumberInputChange('effort')}
+                        onChange={onInputChange('effort')}
                         min="0"
                         max="30"
                         step="0.5"
                         precision="1"
                     />
-                </FormControl >
+                </div >
 
-                <FormControl fullWidth key="complexity"
+                <div key="complexity"
                     id="complexity" className="InputField Complexity">
-                    <InputLabel
-                        className="Label" id="complexity-label">{t('caps.form.complexity')}</InputLabel>
-                    <FieldNumberInput
+                    <p
+                        className="Label" id="complexity-label">{t('caps.form.complexity')}</p>
+                    <input
+                        type="number"
                         className="Input"
                         id="complexity"
-                        fullWidth
                         value={cardState.complexity}
-                        onChange={onNumberInputChange('complexity')}
+                        onChange={onInputChange('complexity')}
                         min="1"
                         max="5"
                         step="1"
                         precision="0"
                     />
-                </FormControl>
+                </div>
 
-                <FormControl fullWidth key="industry"
+                <div key="industry"
                     id="industry" className="InputField Industry">
-                    <InputLabel
-                        className="Label" id="industry-label">{t('caps.form.industry')}</InputLabel>
-                    <Select
-                        labelId="industry-label"
+                    <p
+                        className="Label" id="industry-label">{t('caps.form.industry')}</p>
+                    <select
                         id="industry"
                         className="Input"
-                        fullWidth
                         value={cardState.industry}
-                        onChange={onStringInputChange('industry')}
+                        onChange={onInputChange('industry')}
                     >
-                        {Object.keys(INDUSTRIES).map((key) => (<MenuItem key={key} value={key}>{t(`caps.form.industries.${key}`)}</MenuItem>))}
-                    </Select>
-                </FormControl>
+                        {Object.keys(INDUSTRIES).map((key) => (<option key={key} value={key}>{t(`caps.form.industries.${key}`)}</option>))}
+                    </select>
+                </div>
 
-                <FormControl fullWidth key="caps" id="resultingCaps" className="InputField">
-                    <TextField
+                <div key="caps" id="resultingCaps" className="InputField">
+                    <p
+                        className="Label" id="resultingCaps-label">{t('caps.form.resultingCaps')}</p>
+                    <input
                         className="Input"
-                        label={t('caps.form.resultingCaps')}
                         id="resultingCaps"
-                        fullWidth
                         disabled
                         value={_calcCaps(cardState)}
                     />
-                </FormControl>
-                <Button
+                </div>
+                <input
                     type="submit"
                     color="primary"
                     variant="contained"
-                    className="mod-primary">
-                    {t('caps.form.submit')}
-                </Button>
+                    className="mod-primary"
+                    value={t('caps.form.submit')} />
             </form>
-        </Container>
+        </div>
     );
 }
