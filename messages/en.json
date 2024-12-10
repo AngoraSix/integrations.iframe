@@ -18,9 +18,9 @@
                 "industry": "Industry",
                 "submit": "Submit Changes",
                 "industries": {
-                    "SOFTWARE": "Software",
-                    "WEB_DESIGN": "Web Design",
-                    "BUSINESS_ANALYSIS": "Business Analysis"
+                    "software": "Software",
+                    "web-design": "Web Design",
+                    "business-analysis": "Business Analysis"
                 }
             }
         }

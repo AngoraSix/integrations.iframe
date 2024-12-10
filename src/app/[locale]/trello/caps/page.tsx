@@ -41,6 +41,9 @@ export default function TrelloCapsPage() {
                 return tService.get('card', 'shared', 'capsParams')
                     .then(function (capsParams: { effort: number; complexity: number; industry: string; caps: number; }) {
                         const { effort, complexity, industry, caps } = capsParams;
+                        console.log("RETRIEVED FROM TRELLO");
+                        console.log(capsParams);
+                        console.log({ ...cardState, effort, complexity, industry, definedCaps: caps });
                         setCardState({ ...cardState, effort, complexity, industry, definedCaps: caps });
                     })
                     .then(function () {
