@@ -21,7 +21,7 @@ const TrelloPage = () => {
               callback: function (t) {
                 return t.popup({
                   title: 'Caps',
-                  url: 'en/trello/caps', // use i18n here
+                  url: '/en/trello/caps', // use i18n here
                 });
               },
             },
