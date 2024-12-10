@@ -1,0 +1,28 @@
+{
+    "base": {
+        "title": "AngoraSix",
+        "description": "AngoraSix - Servicio para integrationes con iframe"
+    },
+    "trello": {
+        "base": {
+            "title": "AngoraSix Trello Power-Up",
+            "description": "AngoraSix Integration resources for Trello."
+        },
+        "caps": {
+            "title": "AngoraSix Trello Estimación",
+            "description": "AngoraSix Trello Estimación de tarea",
+            "form": {
+                "effort": "Esfuerzo (en horas)",
+                "complexity": "Complejidad (1-5)",
+                "resultingCaps": "Chapitas resultantes",
+                "industry": "Modificador",
+                "submit": "Guardar",
+                "industries": {
+                    "SOFTWARE": "Software",
+                    "WEB_DESIGN": "Diseño Web",
+                    "BUSINESS_ANALYSIS": "Análisis de Negocios"
+                }
+            }
+        }
+    }
+}
