@@ -1,9 +1,22 @@
-.Trello__Caps.Container{
-    margin: 0 auto;
+.Trello__Caps.Container {
+    margin: 1em auto;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+}
+
+.TypeTab.Inactive {
+    background-color: rgba(0, 0, 0, 0.1);
+    border-color: #0079bf;
+    border-style: solid;
+    border-width: 0 0 1px;
+}
+
+.TypeTab.Active {
+    border-color: #0079bf;
+    border-style: solid;
+    border-width: 1px 1px 0;
 }
 
 .Trello__Caps.Container .Form {
@@ -12,6 +25,14 @@
     align-items: center;
     justify-content: center;
     padding: 0 10px;
+}
+
+.Fields__Container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
 }
 
 .Trello__Caps.Container .InputField {
