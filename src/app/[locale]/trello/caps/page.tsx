@@ -39,7 +39,7 @@ export default function TrelloCapsPage() {
             const tService = window.TrelloPowerUp.iframe();
             tService.render(function () {
                 return tService.get('card', 'shared', 'capsParams')
-                    .then(function (capsParams) {
+                    .then(function (capsParams: { effort: number; complexity: number; industry: string; caps: number; }) {
                         const { effort, complexity, industry, caps } = capsParams;
                         setCardState({ ...cardState, effort, complexity, industry, definedCaps: caps });
                     })
