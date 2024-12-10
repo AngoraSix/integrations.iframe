@@ -8,16 +8,16 @@ const CREDIT_RATIO = 2;
 const AVG_COMPLEXITY = 3;
 
 const INDUSTRIES = {
-    SOFTWARE: {
-        key: 'SOFTWARE',
+    'software': {
+        key: 'software',
         value: 1.5,
     },
-    WEB_DESIGN: {
-        key: 'WEB_DESIGN',
+    'web-design': {
+        key: 'web-design',
         value: 1.5,
     },
-    BUSINESS_ANALYSIS: {
-        key: 'BUSINESS_ANALYSIS',
+    'business-analysis': {
+        key: 'business-analysis',
         value: 1.5,
     }
 };
