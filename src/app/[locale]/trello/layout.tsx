@@ -1,25 +1,16 @@
-'use client';
+import Script from 'next/script';
 
-import { useEffect } from 'react';
-
-export default function TrelloLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  useEffect(() => {
-    // Load Trello Power-Up script
-    const script = document.createElement('script');
-    script.src = 'https://p.trellocdn.com/power-up.min.js';
-    script.async = true;
-
-    document.body.appendChild(script);
-
-    return () => {
-      // Cleanup script on unmount
-      document.body.removeChild(script);
-    };
-  }, []);
-
-  return <>{children}</>;
+export default function TrelloLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang="en">
+      <head>
+        {/* Load Trello Power-Up script */}
+        <Script
+          src="https://p.trellocdn.com/power-up.min.js"
+          strategy="beforeInteractive"
+        />
+      </head>
+      <body>{children}</body>
+    </html>
+  );
 }

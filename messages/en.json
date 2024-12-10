@@ -15,9 +15,9 @@
                 "effort": "Effort (in hours)",
                 "complexity": "Complexity (1-5)",
                 "resultingCaps": "Resulting Caps",
-                "modifier": "Modifier",
+                "industry": "Industry",
                 "submit": "Submit Changes",
-                "modifiers": {
+                "industries": {
                     "SOFTWARE": "Software",
                     "WEB_DESIGN": "Web Design",
                     "BUSINESS_ANALYSIS": "Business Analysis"

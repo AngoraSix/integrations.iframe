@@ -15,9 +15,9 @@
                 "effort": "Esfuerzo (en horas)",
                 "complexity": "Complejidad (1-5)",
                 "resultingCaps": "Chapitas resultantes",
-                "modifier": "Modificador",
+                "industry": "Modificador",
                 "submit": "Guardar",
-                "modifiers": {
+                "industries": {
                     "SOFTWARE": "Software",
                     "WEB_DESIGN": "Diseño Web",
                     "BUSINESS_ANALYSIS": "Análisis de Negocios"

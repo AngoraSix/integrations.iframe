@@ -1,15 +1,15 @@
 'use client';
 
 import { FieldNumberInput } from '@/components/mui-treasury/field-number-input';
-import { Box, Button, Container, FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material';
+import { Button, Container, FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material';
 import { useTranslations } from 'next-intl';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import './caps.css';
 
 const CREDIT_RATIO = 2;
 const AVG_COMPLEXITY = 3;
 
-const MODIFIERS = {
+const INDUSTRIES = {
     SOFTWARE: {
         key: 'SOFTWARE',
         value: 1.5,
@@ -27,12 +27,31 @@ const MODIFIERS = {
 export default function TrelloCapsPage() {
     const t = useTranslations('trello');
 
-
     const [cardState, setCardState] = useState({
         effort: 0,
         complexity: 3,
-        modifier: MODIFIERS.SOFTWARE.key
+        industry: INDUSTRIES.SOFTWARE.key,
+        definedCaps: null
     });
+
+    const [trelloService, setTrelloService] = useState(null);
+
+    useEffect(() => {
+        if (typeof window !== 'undefined' && window.TrelloPowerUp) {
+            const tService = window.TrelloPowerUp.iframe();
+            tService.render(function () {
+                return tService.get('card', 'shared', 'capsParams')
+                    .then(function (capsParams) {
+                        const { effort, complexity, industry, caps } = capsParams;
+                        setCardState({ ...cardState, effort, complexity, industry, definedCaps: caps });
+                    })
+                    .then(function () {
+                        tService.sizeTo('#caps').done();
+                    });
+            });
+            setTrelloService(tService);
+        }
+    }, []);
 
     const onNumberInputChange = (fieldName: string) => (value: number) => {
         setCardState({ ...cardState, [fieldName]: value });
@@ -43,20 +62,34 @@ export default function TrelloCapsPage() {
         setCardState({ ...cardState, [fieldName]: inputValue });
     };
 
+    const onSubmit = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        e.preventDefault();
+        if (trelloService != null) {
+            trelloService.set('card', 'shared', 'capsParams', {
+                effort: cardState.effort,
+                complexity: cardState.complexity,
+                industry: cardState.industry,
+                caps: _calcCaps(cardState),
+            }).then(function () {
+                trelloService.closePopup();
+            });
+        } else {
+            console.log('Trello service not available');
+        }
+    };
 
-    const _calcCaps = (ef: number, com: number, modif: string) => {
-        return (ef / CREDIT_RATIO) * (com / AVG_COMPLEXITY) * MODIFIERS[modif as keyof typeof MODIFIERS].value;
+    const _calcCaps = ({ effort, complexity, industry }: { effort: number, complexity: number, industry: string }) => {
+        return (effort / CREDIT_RATIO) * (complexity / AVG_COMPLEXITY) * INDUSTRIES[industry as keyof typeof INDUSTRIES].value;
     };
 
     return (
-        <Container className='Trello__Caps Container' maxWidth="sm">
-            <form className='Form' id="caps">
+        <Container id='caps' className='Trello__Caps Container' maxWidth="sm">
+            <form className='Form' id="caps" onSubmit={onSubmit}>
                 <FormControl fullWidth key="effort" id="effort" className="InputField Effort">
                     <InputLabel
                         className="Label" id="effort-label">{t('caps.form.effort')}</InputLabel>
                     <FieldNumberInput
                         className="Input"
-                        labelId="effort-label"
                         id="effort"
                         fullWidth
                         value={cardState.effort}
@@ -74,7 +107,6 @@ export default function TrelloCapsPage() {
                         className="Label" id="complexity-label">{t('caps.form.complexity')}</InputLabel>
                     <FieldNumberInput
                         className="Input"
-                        labelId="commplexity-label"
                         id="complexity"
                         fullWidth
                         value={cardState.complexity}
@@ -86,19 +118,19 @@ export default function TrelloCapsPage() {
                     />
                 </FormControl>
 
-                <FormControl fullWidth key="modifier"
-                    id="modifier" className="InputField Modifier">
+                <FormControl fullWidth key="industry"
+                    id="industry" className="InputField Industry">
                     <InputLabel
-                        className="Label" id="modifier-label">{t('caps.form.modifier')}</InputLabel>
+                        className="Label" id="industry-label">{t('caps.form.industry')}</InputLabel>
                     <Select
-                        labelId="modifier-label"
-                        id="modifier"
+                        labelId="industry-label"
+                        id="industry"
                         className="Input"
                         fullWidth
-                        value={cardState.modifier}
-                        onChange={onStringInputChange('modifier')}
+                        value={cardState.industry}
+                        onChange={onStringInputChange('industry')}
                     >
-                        {Object.keys(MODIFIERS).map((key) => (<MenuItem key={key} value={key}>{t(`caps.form.modifiers.${key}`)}</MenuItem>))}
+                        {Object.keys(INDUSTRIES).map((key) => (<MenuItem key={key} value={key}>{t(`caps.form.industries.${key}`)}</MenuItem>))}
                     </Select>
                 </FormControl>
 
@@ -109,38 +141,9 @@ export default function TrelloCapsPage() {
                         id="resultingCaps"
                         fullWidth
                         disabled
-                        value={_calcCaps(cardState.effort, cardState.complexity, cardState.modifier)}
-                    // // step="0.01"
-                    // precision="2"
+                        value={_calcCaps(cardState)}
                     />
                 </FormControl>
-
-                {/* <label for="complexity">Complexity (1-5):</label>
-      <input
-        value="3"
-        type="number"
-        min="1"
-        max="5"
-        step="1"
-        name="complexity"
-        id="complexityInput"
-      />
-
-      <label for="modifier">Industry Modifier:</label>
-      <select name="modifier" id="industryInput">
-        <option value="software">Software (x1.5)</option>
-        <option value="web-design">Web Design (x1.5)</option>
-      </select>
-
-      <label for="caps">RESULTING CAPS:</label>
-      <input
-        disabled
-        type="number"
-        step="0.01"
-        name="capsOutput"
-        id="capsOutput"
-      /> */}
-
                 <Button
                     type="submit"
                     color="primary"
