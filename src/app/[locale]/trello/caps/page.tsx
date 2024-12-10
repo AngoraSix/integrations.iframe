@@ -28,7 +28,7 @@ export default function TrelloCapsPage() {
     const [cardState, setCardState] = useState({
         effort: 0,
         complexity: 3,
-        industry: INDUSTRIES.SOFTWARE.key,
+        industry: INDUSTRIES.software.key,
         definedCaps: null
     });
 
