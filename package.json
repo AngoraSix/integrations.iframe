@@ -7,6 +7,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
+    "start:local:win": "next dev -p 10950",
     "lint": "next lint"
   },
   "dependencies": {

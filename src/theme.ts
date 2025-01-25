@@ -5,38 +5,25 @@ import { createTheme } from '@mui/material/styles';
 const theme = createTheme({
   palette: {
     primary: {
-      light: '#C6D4D9',
-      main: '#A9BEC5',
-      dark: '#47626B',
-      contrastText: '#fff',
+      main: '#0A2239',
+      light: "#1B5993",
+      dark: "#030D16",
+      contrastText: '#ffffff',
     },
     secondary: {
-      light: '#62a8de',
-      main: '#3F6E91',
-      dark: '#29475e',
-      contrastText: '#000',
+      main: '#AFC1D6',
+      light: "#DCE7EA",
+      dark: "#7D99BA",
+      contrastText: '#000000',
     },
   },
   typography: {
-    fontFamily: ['var(--font-ruluko)', 'Roboto', 'Helvetica', 'Arial', 'sans-serif'].join(','),
-    fontSize: 14,
-    h1: {
-      fontFamily: ['var(--font-zcool)', 'Roboto', 'Helvetica', 'Arial', 'sans-serif'].join(
-        ','
-      ),
-    },
-    h2: {
-      fontFamily: ['var(--font-zcool)', 'Roboto', 'Helvetica', 'Arial', 'sans-serif'].join(
-        ','
-      ),
-    },
-    h3: {
-      fontFamily: ['var(--font-zcool)', 'Roboto', 'Helvetica', 'Arial', 'sans-serif'].join(
-        ','
-      ),
-    },
-  }
-
+    fontFamily: ['var(--font-lato)', 'Roboto', 'Helvetica', 'Arial', 'sans-serif'].join(','),
+    fontWeightLight: 300,
+    fontWeightRegular: 400,
+    fontWeightMedium: 500,
+    fontWeightBold: 700,
+  },
 });
 
 export default theme;

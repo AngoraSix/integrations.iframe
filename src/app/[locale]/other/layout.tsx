@@ -1,7 +1,7 @@
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v15-appRouter';
 import { ThemeProvider } from '@mui/material/styles';
 import theme from '../../../theme';
-import { ruluko } from './fonts';
+import { lato } from './fonts';
 
 export default function RootLayout({
   children,
@@ -10,7 +10,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={ruluko.variable}>
+      <body className={lato.variable}>
         <AppRouterCacheProvider>
           <ThemeProvider theme={theme}>
             {children}
