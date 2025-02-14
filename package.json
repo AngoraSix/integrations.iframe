@@ -4,9 +4,10 @@
   "description": "Integrations with other third-party apps using iframes",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev -p 10950",
     "build": "next build",
     "start": "next start",
+    "start:local:win": "next dev -p 10950",
     "lint": "next lint"
   },
   "dependencies": {

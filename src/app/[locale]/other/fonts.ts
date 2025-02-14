@@ -1,15 +1,9 @@
-import { Ruluko, ZCOOL_XiaoWei } from 'next/font/google';
+import { Lato } from 'next/font/google';
 
-export const ruluko = Ruluko({
-    weight: ['400'],
-    subsets: ['latin'],
-    display: 'swap',
-    variable: '--font-ruluko',
-});
-
-export const zcool = ZCOOL_XiaoWei({
-    weight: ['400'],
-    subsets: ['latin'],
-    display: 'swap',
-    variable: '--font-zcool',
+export const lato = Lato({
+    weight: ['100', '300', '400', '700', '900'], // Include all available weights
+    style: ['normal', 'italic'], // Include both normal and italic styles
+    subsets: ['latin'], // Add other subsets if needed
+    display: 'swap', // Recommended for performance
+    variable: '--font-lato', // Custom CSS variable
 });
