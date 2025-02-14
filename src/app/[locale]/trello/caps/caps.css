@@ -6,6 +6,10 @@
     justify-content: center;
 }
 
+.Trello__Caps__StrategyType__Tabs .MuiTabs-indicator {
+    background-color: transparent;
+}
+
 .TypeTab.Inactive {
     background-color: rgba(0, 0, 0, 0.1);
     border-color: #0A2239;
@@ -17,6 +21,7 @@
     border-color: #0A2239;
     border-style: solid;
     border-width: 1px 1px 0;
+    color: #000000;
 }
 
 .Trello__Caps.Container .Form {

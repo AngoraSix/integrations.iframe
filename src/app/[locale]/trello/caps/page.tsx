@@ -152,9 +152,9 @@ export default function TrelloCapsPage() {
         }
     };
 
-    const onTypeChange = (e: React.SyntheticEvent, newValue: number) => {
-        const selectedKey = Object.values(TASK_TYPES)[newValue].key;
-        setCardState({ ...cardState, ...INITIAL_STATE, selectedType: selectedKey });
+    const onTypeChange = (e: React.SyntheticEvent, newValue: string) => {
+        // const selectedKey = Object.values(TASK_TYPES)[newValue].key;
+        setCardState({ ...cardState, ...INITIAL_STATE, selectedType: newValue });
     };
 
     const _calcCaps = ({ effort, complexity, industry, selectedType, roleIndex, activityIndex, hourlyRate,
@@ -167,10 +167,19 @@ export default function TrelloCapsPage() {
     const isContinuousActivity = cardState.selectedType === TASK_TYPES.CONTINUOUS_ACTIVITY.key;
 
     return (
-        <div id='caps' className='Trello__Caps Container' maxWidth="sm">
+        <div id='caps' className='Trello__Caps Container'>
             <form className='Form' id="caps" onSubmit={onSubmit}>
-                <Tabs value={cardState.selectedType} onChange={onTypeChange} aria-label="basic tabs example">
-                    {Object.keys(TASK_TYPES).map(type => (<Tab key={type} id={`type-tab${type}`} label={t(`caps.form.types.${type}`)} className={`TypeTab ${type === cardState.selectedType ? 'Active' : 'Inactive'}`} />))}
+                <Tabs
+                    className='Trello__Caps__StrategyType__Tabs'
+                    value={cardState.selectedType}
+                    onChange={onTypeChange}
+                    aria-label="basic tabs example">
+                    {Object.keys(TASK_TYPES).map(type => (
+                        <Tab key={type}
+                            value={TASK_TYPES[type].key}
+                            id={`type-tab${type}`}
+                            label={t(`caps.form.types.${type}`)}
+                            className={`TypeTab ${type === cardState.selectedType ? 'Active' : 'Inactive'}`} />))}
                 </Tabs>
                 {isContinuousActivity
                     ? (<div key={TASK_TYPES.CONTINUOUS_ACTIVITY.key} className={`Fields__Container`}>
