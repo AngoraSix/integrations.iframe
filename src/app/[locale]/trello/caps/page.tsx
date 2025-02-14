@@ -134,17 +134,21 @@ export default function TrelloCapsPage() {
 
     const onInputChange = (fieldName: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
         const inputValue = e.target?.value;
-        setCardState({ ...cardState, [fieldName]: inputValue });
+        const newState = { ...cardState, [fieldName]: inputValue };
+        setCardState({ ...newState, definedCaps: _calcCaps(newState) });
     };
 
     const onSubmit = async (e: React.ChangeEvent<HTMLInputElement>) => {
         e.preventDefault();
         if (trelloService != null) {
             trelloService.set('card', 'shared', 'capsParams', {
+                strategy: cardState.selectedType,
                 effort: cardState.effort,
                 complexity: cardState.complexity,
                 industry: cardState.industry,
-                caps: _calcCaps(cardState),
+                industryModifier: INDUSTRIES[cardState.industry as keyof typeof INDUSTRIES].value,
+                moneyPayment: cardState.moneyPayment,
+                caps: cardState.definedCaps,
             }).then(function () {
                 trelloService.closePopup();
             });
@@ -295,7 +299,7 @@ export default function TrelloCapsPage() {
                         className="Input"
                         id="resultingCaps"
                         disabled
-                        value={_calcCaps(cardState)}
+                        value={cardState.definedCaps}
                     />
                 </div>
 
