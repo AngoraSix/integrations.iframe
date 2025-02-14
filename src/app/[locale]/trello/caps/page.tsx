@@ -1,5 +1,6 @@
 'use client';
 
+import { Tab, Tabs } from '@mui/material';
 import { useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
 import './caps.css';
@@ -7,19 +8,103 @@ import './caps.css';
 const CREDIT_RATIO = 2;
 const AVG_COMPLEXITY = 3;
 
+const TASK_TYPES = {
+    ONE_OFF: {
+        key: 'ONE_OFF'
+    },
+    CONTINUOUS_ACTIVITY: {
+        key: 'CONTINUOUS_ACTIVITY'
+    }
+};
+
 const INDUSTRIES = {
-    SOFTWARE: {
-        key: 'SOFTWARE',
+    'software': {
+        key: 'software',
         value: 1.5,
     },
-    WEB_DESIGN: {
-        key: 'WEB_DESIGN',
+    'web-design': {
+        key: 'web-design',
         value: 1.5,
     },
-    BUSINESS_ANALYSIS: {
-        key: 'BUSINESS_ANALYSIS',
+    'business-analysis': {
+        key: 'business-analysis',
         value: 1.5,
     }
+};
+
+const ROLES_ACTIVITIES_MAPPNIGS = [
+    {
+        label: 'Traductor: Inglés',
+        activities: [{
+            label: 'Traducción - Inglés -> Español',
+            hourlyRate: 4000,
+            hourlyCaps: 0.5
+        },
+        {
+            label: 'Interpretación - Español -> Inglés',
+            hourlyRate: 7000,
+            hourlyCaps: 0.7
+        },
+        {
+            label: 'Traducción - Inglés -> Español',
+            hourlyRate: 4500,
+            hourlyCaps: 0.8
+        },
+        {
+            label: 'Interpretación - Inglés -> Español',
+            hourlyRate: 8500,
+            hourlyCaps: 0.3
+        }]
+    },
+    {
+        label: 'Traductor: Portugués',
+        activities: [
+            {
+                label: 'Traducción - Español -> Portugués',
+                hourlyRate: 5000,
+                hourlyCaps: 1.1
+            },
+            {
+                label: 'Interpretación - Español -> Portugués',
+                hourlyRate: 8000,
+                hourlyCaps: 1.3
+            },
+            {
+                label: 'Traducción - Portugués -> Español',
+                hourlyRate: 5500,
+                hourlyCaps: 1.6
+            },
+            {
+                label: 'Interpretación - Portugués -> Español',
+                hourlyRate: 9000,
+                hourlyCaps: 0.9
+            }]
+    },
+    {
+        label: 'Administrador',
+        activities: [
+            {
+                label: 'Coordinación de actividades',
+                hourlyRate: 7500,
+                hourlyCaps: 1.3
+            }
+        ]
+    }
+];
+
+const INITIAL_STATE = {
+    selectedType: TASK_TYPES.ONE_OFF.key,
+
+    roleIndex: 0,
+    activityIndex: 0,
+    hourlyRate: 0,
+
+    effort: 0,
+    complexity: 3,
+    industry: INDUSTRIES.software.key,
+
+    moneyPayment: 0,
+    definedCaps: 0
 };
 
 export default function TrelloCapsPage() {
@@ -67,63 +152,134 @@ export default function TrelloCapsPage() {
         }
     };
 
-    const _calcCaps = ({ effort, complexity, industry }: { effort: number, complexity: number, industry: string }) => {
-        return (effort / CREDIT_RATIO) * (complexity / AVG_COMPLEXITY) * INDUSTRIES[industry as keyof typeof INDUSTRIES].value;
+    const onTypeChange = (e: React.SyntheticEvent, newValue: number) => {
+        const selectedKey = Object.values(TASK_TYPES)[newValue].key;
+        setCardState({ ...cardState, ...INITIAL_STATE, selectedType: selectedKey });
     };
+
+    const _calcCaps = ({ effort, complexity, industry, selectedType, roleIndex, activityIndex, hourlyRate,
+    }: { effort: number, complexity: number, industry: string, selectedType: string, roleIndex: number, activityIndex: number, hourlyRate: number }) => {
+        return (selectedType === TASK_TYPES.ONE_OFF.key)
+            ? (effort / CREDIT_RATIO) * (complexity / AVG_COMPLEXITY) * INDUSTRIES[industry as keyof typeof INDUSTRIES].value
+            : ROLES_ACTIVITIES_MAPPNIGS[roleIndex].activities[activityIndex].hourlyCaps;
+    };
+
+    const isContinuousActivity = cardState.selectedType === TASK_TYPES.CONTINUOUS_ACTIVITY.key;
 
     return (
         <div id='caps' className='Trello__Caps Container' maxWidth="sm">
             <form className='Form' id="caps" onSubmit={onSubmit}>
-                <div key="effort" id="effort" className="InputField Effort">
-                    <p
-                        className="Label" id="effort-label">{t('caps.form.effort')}</p>
-                    <input
-                        type="number"
-                        className="Input"
-                        id="effort"
-                        value={cardState.effort}
-                        onChange={onInputChange('effort')}
-                        min="0"
-                        max="30"
-                        step="0.5"
-                        precision="1"
-                    />
-                </div >
+                <Tabs value={cardState.selectedType} onChange={onTypeChange} aria-label="basic tabs example">
+                    {Object.keys(TASK_TYPES).map(type => (<Tab key={type} id={`type-tab${type}`} label={t(`caps.form.types.${type}`)} className={`TypeTab ${type === cardState.selectedType ? 'Active' : 'Inactive'}`} />))}
+                </Tabs>
+                {isContinuousActivity
+                    ? (<div key={TASK_TYPES.CONTINUOUS_ACTIVITY.key} className={`Fields__Container`}>
+                        <div key="role"
+                            id="role" className="InputField Role">
+                            <p
+                                className="Label" id="role-label">{t('caps.form.role')}</p>
+                            <select
+                                id="role"
+                                className="Input"
+                                value={cardState.roleIndex}
+                                onChange={onInputChange('roleIndex')}
+                            >
+                                {ROLES_ACTIVITIES_MAPPNIGS.map((r, i) => (<option key={i} value={i}>{r.label}</option>))}
+                            </select>
+                        </div>
+                        <div key="activity"
+                            id="activity" className="InputField Role">
+                            <p
+                                className="Label" id="activity-label">{t('caps.form.activity')}</p>
+                            <select
+                                id="activity"
+                                className="Input"
+                                value={cardState.activityIndex}
+                                onChange={onInputChange('activityIndex')}
+                            >
+                                {ROLES_ACTIVITIES_MAPPNIGS[cardState.roleIndex].activities.map((a, i) => (<option key={i} value={i}>{a.label}</option>))}
+                            </select>
+                        </div>
+                        <div key="moneyPayment-perHour"
+                            id="moneyPayment-perHour" className="InputField MoneyPayment__PerHour">
+                            <p
+                                className="Label" id="moneyPayment-perHour-label">{t('caps.form.moneyPayment-perHour')}</p>
+                            <input
+                                className="Input"
+                                id="moneyPayment-perHour"
+                                disabled
+                                value={ROLES_ACTIVITIES_MAPPNIGS[cardState.roleIndex].activities[cardState.activityIndex].hourlyRate}
+                            />
+                        </div>
+                    </div>)
+                    : (<div key={TASK_TYPES.ONE_OFF.key} className={`Fields__Container`}>
+                        <div key="effort" id="effort" className="InputField Effort">
+                            <p
+                                className="Label" id="effort-label">{t('caps.form.effort')}</p>
+                            <input
+                                type="number"
+                                className="Input"
+                                id="effort"
+                                value={cardState.effort}
+                                onChange={onInputChange('effort')}
+                                min="0"
+                                max="30"
+                                step="0.5"
+                                precision="1"
+                            />
+                        </div >
 
-                <div key="complexity"
-                    id="complexity" className="InputField Complexity">
-                    <p
-                        className="Label" id="complexity-label">{t('caps.form.complexity')}</p>
-                    <input
-                        type="number"
-                        className="Input"
-                        id="complexity"
-                        value={cardState.complexity}
-                        onChange={onInputChange('complexity')}
-                        min="1"
-                        max="5"
-                        step="1"
-                        precision="0"
-                    />
-                </div>
+                        <div key="complexity"
+                            id="complexity" className="InputField Complexity">
+                            <p
+                                className="Label" id="complexity-label">{t('caps.form.complexity')}</p>
+                            <input
+                                type="number"
+                                className="Input"
+                                id="complexity"
+                                value={cardState.complexity}
+                                onChange={onInputChange('complexity')}
+                                min="1"
+                                max="5"
+                                step="1"
+                                precision="0"
+                            />
+                        </div>
 
-                <div key="industry"
-                    id="industry" className="InputField Industry">
-                    <p
-                        className="Label" id="industry-label">{t('caps.form.industry')}</p>
-                    <select
-                        id="industry"
-                        className="Input"
-                        value={cardState.industry}
-                        onChange={onInputChange('industry')}
-                    >
-                        {Object.keys(INDUSTRIES).map((key) => (<option key={key} value={key}>{t(`caps.form.industries.${key}`)}</option>))}
-                    </select>
-                </div>
+                        <div key="industry"
+                            id="industry" className="InputField Industry">
+                            <p
+                                className="Label" id="industry-label">{t('caps.form.industry')}</p>
+                            <select
+                                id="industry"
+                                className="Input"
+                                value={cardState.industry}
+                                onChange={onInputChange('industry')}
+                            >
+                                {Object.keys(INDUSTRIES).map((key) => (<option key={key} value={key}>{t(`caps.form.industries.${key}`)}</option>))}
+                            </select>
+                        </div>
 
+                        <div key="moneyPayment"
+                            id="moneyPayment" className="InputField MoneyPayment">
+                            <p
+                                className="Label" id="moneyPayment-label">{t('caps.form.moneyPayment')}</p>
+                            <input
+                                type="number"
+                                className="Input"
+                                id="moneyPayment"
+                                value={cardState.moneyPayment}
+                                onChange={onInputChange('moneyPayment')}
+                                min="0"
+                                max="1000000"
+                                step="250"
+                                precision="0"
+                            />
+                        </div>
+                    </div>)}
                 <div key="caps" id="resultingCaps" className="InputField">
                     <p
-                        className="Label" id="resultingCaps-label">{t('caps.form.resultingCaps')}</p>
+                        className="Label" id="resultingCaps-label">{t(`caps.form.resultingCaps${isContinuousActivity ? '-perHour' : ''}`)}</p>
                     <input
                         className="Input"
                         id="resultingCaps"
@@ -131,6 +287,7 @@ export default function TrelloCapsPage() {
                         value={_calcCaps(cardState)}
                     />
                 </div>
+
                 <input
                     type="submit"
                     color="primary"
