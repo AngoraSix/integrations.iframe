@@ -8,16 +8,16 @@ const CREDIT_RATIO = 2;
 const AVG_COMPLEXITY = 3;
 
 const INDUSTRIES = {
-    'software': {
-        key: 'software',
+    SOFTWARE: {
+        key: 'SOFTWARE',
         value: 1.5,
     },
-    'web-design': {
-        key: 'web-design',
+    WEB_DESIGN: {
+        key: 'WEB_DESIGN',
         value: 1.5,
     },
-    'business-analysis': {
-        key: 'business-analysis',
+    BUSINESS_ANALYSIS: {
+        key: 'BUSINESS_ANALYSIS',
         value: 1.5,
     }
 };
@@ -25,12 +25,7 @@ const INDUSTRIES = {
 export default function TrelloCapsPage() {
     const t = useTranslations('trello');
 
-    const [cardState, setCardState] = useState({
-        effort: 0,
-        complexity: 3,
-        industry: INDUSTRIES.software.key,
-        definedCaps: null
-    });
+    const [cardState, setCardState] = useState(INITIAL_STATE);
 
     const [trelloService, setTrelloService] = useState(null);
 
@@ -40,12 +35,7 @@ export default function TrelloCapsPage() {
             tService.render(function () {
                 return tService.get('card', 'shared', 'capsParams')
                     .then(function (capsParams: { effort: number; complexity: number; industry: string; caps: number; }) {
-                        const { effort, complexity, industry, caps } = capsParams || {
-                            effort: 0,
-                            complexity: 3,
-                            industry: INDUSTRIES.software.key,
-                            caps: null
-                        };
+                        const { effort, complexity, industry, caps } = capsParams;
                         setCardState({ ...cardState, effort, complexity, industry, definedCaps: caps });
                     })
                     .then(function () {

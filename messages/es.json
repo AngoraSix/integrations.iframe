@@ -14,9 +14,18 @@
             "form": {
                 "effort": "Esfuerzo (en horas)",
                 "complexity": "Complejidad (1-5)",
+                "role": "Rol",
+                "activity": "Actividad",
                 "resultingCaps": "Chapitas resultantes",
+                "resultingCaps-perHour": "Chapitas resultantes (p/hora)",
+                "moneyPayment": "Pago en dinero",
+                "moneyPayment-perHour": "Pago en dinero (p/hora)",
                 "industry": "Modificador",
                 "submit": "Guardar",
+                "types":{
+                    "ONE_OFF": "Tarea única",
+                    "CONTINUOUS_ACTIVITY": "Actividad continua"
+                },
                 "industries": {
                     "software": "Software",
                     "web-design": "Diseño Web",

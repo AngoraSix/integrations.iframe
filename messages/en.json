@@ -14,9 +14,18 @@
             "form": {
                 "effort": "Effort (in hours)",
                 "complexity": "Complexity (1-5)",
+                "role": "Role",
+                "activity": "Activity",
                 "resultingCaps": "Resulting Caps",
+                "resultingCaps-perHour": "Resulting Caps (p/hour)",
+                "moneyPayment": "Money Payment",
+                "moneyPayment-perHour": "Money Payment (p/hour)",
                 "industry": "Industry",
                 "submit": "Submit Changes",
+                "types":{
+                    "ONE_OFF": "One-Off Task",
+                    "CONTINUOUS_ACTIVITY": "Continuous Activity"
+                },
                 "industries": {
                     "software": "Software",
                     "web-design": "Web Design",
