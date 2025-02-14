@@ -119,9 +119,10 @@ export default function TrelloCapsPage() {
             const tService = window.TrelloPowerUp.iframe();
             tService.render(function () {
                 return tService.get('card', 'shared', 'capsParams')
-                    .then(function (capsParams: { effort: number; complexity: number; industry: string; caps: number; }) {
-                        const { effort, complexity, industry, caps } = capsParams;
-                        setCardState({ ...cardState, effort, complexity, industry, definedCaps: caps });
+                    .then(function (capsParams: { effort: number; complexity: number; industry: string; moneyPayment: number; caps: number; }) {
+                        const { effort, complexity, industry, moneyPayment, caps } = capsParams;
+                        console.log("Initializing card powerup with params:", capsParams);
+                        setCardState({ ...cardState, effort, complexity, industry, moneyPayment, definedCaps: caps });
                     })
                     .then(function () {
                         tService.sizeTo('#caps').done();
@@ -170,6 +171,7 @@ export default function TrelloCapsPage() {
         <div id='caps' className='Trello__Caps Container'>
             <form className='Form' id="caps" onSubmit={onSubmit}>
                 <Tabs
+                    variant="fullWidth"
                     className='Trello__Caps__StrategyType__Tabs'
                     value={cardState.selectedType}
                     onChange={onTypeChange}
