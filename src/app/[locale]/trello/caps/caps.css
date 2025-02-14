@@ -6,8 +6,12 @@
     justify-content: center;
 }
 
-.Trello__Caps.Container .Trello__Caps__StrategyType__Tabs {
+.Trello__Caps.Container .Trello__Caps__StrategyType__Tabs .TypeTab.Active {
     color: var(--ds-text);
+}
+
+.Trello__Caps.Container .Trello__Caps__StrategyType__Tabs .TypeTab.Inactive {
+    color: var(--ds-text-disabled);
 }
 
 .Trello__Caps__StrategyType__Tabs .MuiTabs-indicator {
