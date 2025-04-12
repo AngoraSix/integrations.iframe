@@ -115,28 +115,50 @@ export default function TrelloCapsPage() {
     const [trelloService, setTrelloService] = useState(null);
 
     useEffect(() => {
-        if (typeof window !== 'undefined' && window.TrelloPowerUp) {
+        if (typeof window !== 'undefined' && window.TrelloPowerUp && !trelloService) {
             console.log("Initializing Trello PowerUp...");
-            const tService = window.TrelloPowerUp.iframe();
+            console.log(trelloService);
+            const tService = trelloService || window.TrelloPowerUp.iframe();
             console.log("Trello PowerUp initialized:", tService);
-            tService.render(function () {
-                return tService.get('card', 'shared', 'capsParams')
-                    .then(function (capsParams: { effort: number; complexity: number; industry: string; moneyPayment: number; caps: number; }) {
+            setTrelloService(tService);
+            console.log("Registering the render callback");
+            // Register the render callback only once.
+            tService.render(() => {
+
+                console.log("Calling trello service GET...");
+                // Start asynchronous operations without returning the promise.
+                tService.get('card', 'shared', 'capsParams')
+                    .then((capsParams: {
+                        effort: number;
+                        complexity: number;
+                        industry: string;
+                        moneyPayment: number;
+                        caps: number;
+                    }) => {
                         console.log("Retrieved card powerup params:", capsParams);
                         const { effort, complexity, industry, moneyPayment, caps } = capsParams;
                         console.log("Initializing card powerup with params:", capsParams);
-                        setCardState({ ...cardState, effort, complexity, industry, moneyPayment, definedCaps: caps });
+                        // Use functional update to ensure you’re working with the latest state.
+                        setCardState((prevState) => ({
+                            ...prevState,
+                            effort,
+                            complexity,
+                            industry,
+                            moneyPayment,
+                            definedCaps: caps
+                        }));
                     })
-                    .then(function () {
+                    .then(() => {
                         console.log("Adjusting window");
+                        // Adjust window size, then optionally indicate that you’re done.
                         tService.sizeTo('#caps').done();
                     });
             });
-            setTrelloService(tService);
         } else {
             console.log("Trello PowerUp not available yet...");
         }
-    }, [window?.TrelloPowerUp, cardState]);
+        console.log("FINISHED EFFECT");
+    }, []); // Empty dependency array so this effect runs only once.
 
     const onInputChange = (fieldName: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
         const inputValue = e.target?.value;
