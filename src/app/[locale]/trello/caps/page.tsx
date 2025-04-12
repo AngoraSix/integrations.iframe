@@ -137,32 +137,29 @@ export default function TrelloCapsPage() {
                     caps: number;
                 }) => {
                     console.log("Retrieved card powerup params:", capsParams);
-                    const { effort, complexity, industry, moneyPayment, caps } = capsParams;
-                    console.log("Initializing card powerup with params:", capsParams);
-                    // Use functional update to ensure you’re working with the latest state.
-                    setCardState((prevState) => ({
-                        ...prevState,
-                        intiallyLoaded: true,
-                        effort,
-                        complexity,
-                        industry,
-                        moneyPayment,
-                        definedCaps: caps
-                    }));
+                    if (capsParams) {
+                        const { effort, complexity, industry, moneyPayment, caps } = capsParams;
+                        // Use functional update to ensure you’re working with the latest state.
+                        setCardState((prevState) => ({
+                            ...prevState,
+                            intiallyLoaded: true,
+                            effort,
+                            complexity,
+                            industry,
+                            moneyPayment,
+                            definedCaps: caps
+                        }));
+                    }
                 })
                 .then(() => {
-                    console.log("Adjusting window");
                     // Adjust window size, then optionally indicate that you’re done.
                     trelloService.sizeTo('#caps').done();
                 });
-        } else {
-            console.log("Trello service not available or already loaded.");
-        };
+        }
     }, [trelloService, cardState.intiallyLoaded]); // Empty dependency array so this effect runs only once.
 
     const onInputChange = (fieldName: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
         const inputValue = e.target?.value;
-        console.log(`Input changed: ${fieldName} = ${inputValue}`);
         const newState = { ...cardState, [fieldName]: inputValue };
         setCardState({ ...newState, definedCaps: _calcCaps(newState) });
     };
