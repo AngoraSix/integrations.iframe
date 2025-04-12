@@ -123,6 +123,7 @@ export default function TrelloCapsPage() {
             tService.render(() => {
                 console.log("Trello update render callback called...");
             });
+            tService.sizeTo('#caps');
         }
     }, []); // Empty dependency array so this effect runs only once.
 
