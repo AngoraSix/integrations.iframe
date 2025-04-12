@@ -116,24 +116,31 @@ export default function TrelloCapsPage() {
 
     useEffect(() => {
         if (typeof window !== 'undefined' && window.TrelloPowerUp) {
+            console.log("Initializing Trello PowerUp...");
             const tService = window.TrelloPowerUp.iframe();
+            console.log("Trello PowerUp initialized:", tService);
             tService.render(function () {
                 return tService.get('card', 'shared', 'capsParams')
                     .then(function (capsParams: { effort: number; complexity: number; industry: string; moneyPayment: number; caps: number; }) {
+                        console.log("Retrieved card powerup params:", capsParams);
                         const { effort, complexity, industry, moneyPayment, caps } = capsParams;
                         console.log("Initializing card powerup with params:", capsParams);
                         setCardState({ ...cardState, effort, complexity, industry, moneyPayment, definedCaps: caps });
                     })
                     .then(function () {
+                        console.log("Adjusting window");
                         tService.sizeTo('#caps').done();
                     });
             });
             setTrelloService(tService);
+        } else {
+            console.log("Trello PowerUp not available yet...");
         }
-    }, []);
+    }, [window?.TrelloPowerUp, cardState]);
 
     const onInputChange = (fieldName: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
         const inputValue = e.target?.value;
+        console.log(`Input changed: ${fieldName} = ${inputValue}`);
         const newState = { ...cardState, [fieldName]: inputValue };
         setCardState({ ...newState, definedCaps: _calcCaps(newState) });
     };
@@ -158,7 +165,6 @@ export default function TrelloCapsPage() {
     };
 
     const onTypeChange = (e: React.SyntheticEvent, newValue: string) => {
-        // const selectedKey = Object.values(TASK_TYPES)[newValue].key;
         setCardState({ ...cardState, ...INITIAL_STATE, selectedType: newValue });
     };
 
