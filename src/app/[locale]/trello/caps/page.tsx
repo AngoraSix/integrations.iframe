@@ -93,6 +93,8 @@ const ROLES_ACTIVITIES_MAPPNIGS = [
 ];
 
 const INITIAL_STATE = {
+    intiallyLoaded: false,
+
     selectedType: TASK_TYPES.ONE_OFF.key,
 
     roleIndex: 0,
@@ -117,17 +119,23 @@ export default function TrelloCapsPage() {
     useEffect(() => {
         if (typeof window !== 'undefined' && window.TrelloPowerUp && !trelloService) {
             console.log("Initializing Trello PowerUp...");
-            console.log(trelloService);
             const tService = trelloService || window.TrelloPowerUp.iframe();
             console.log("Trello PowerUp initialized:", tService);
             setTrelloService(tService);
+        } else {
+            console.log("Trello PowerUp not available yet...");
+        }
+        console.log("FINISHED EFFECT");
+    }, []); // Empty dependency array so this effect runs only once.
+
+    useEffect(() => {
+        if (trelloService && !cardState.intiallyLoaded) {
             console.log("Registering the render callback");
             // Register the render callback only once.
-            tService.render(() => {
-
+            trelloService.render(() => {
                 console.log("Calling trello service GET...");
                 // Start asynchronous operations without returning the promise.
-                tService.get('card', 'shared', 'capsParams')
+                trelloService.get('card', 'shared', 'capsParams')
                     .then((capsParams: {
                         effort: number;
                         complexity: number;
@@ -141,6 +149,7 @@ export default function TrelloCapsPage() {
                         // Use functional update to ensure you’re working with the latest state.
                         setCardState((prevState) => ({
                             ...prevState,
+                            intiallyLoaded: true,
                             effort,
                             complexity,
                             industry,
@@ -151,14 +160,14 @@ export default function TrelloCapsPage() {
                     .then(() => {
                         console.log("Adjusting window");
                         // Adjust window size, then optionally indicate that you’re done.
-                        tService.sizeTo('#caps').done();
+                        trelloService.sizeTo('#caps').done();
                     });
             });
         } else {
-            console.log("Trello PowerUp not available yet...");
+            console.log("NOT LOADING STATUS", trelloService, cardState.intiallyLoaded);
         }
-        console.log("FINISHED EFFECT");
-    }, []); // Empty dependency array so this effect runs only once.
+        console.log("FINISHED EFFECT LOAD");
+    }, [trelloService, cardState.intiallyLoaded]); // Empty dependency array so this effect runs only once.
 
     const onInputChange = (fieldName: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
         const inputValue = e.target?.value;
