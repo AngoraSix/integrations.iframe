@@ -122,7 +122,7 @@ export default function TrelloCapsPage() {
             setTrelloService(tService);
             tService.render(() => {
                 console.log("Trello update render callback called...");
-            }
+            });
         }
     }, []); // Empty dependency array so this effect runs only once.
 
