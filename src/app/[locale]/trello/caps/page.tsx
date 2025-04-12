@@ -151,10 +151,6 @@ export default function TrelloCapsPage() {
                             definedCaps: caps
                         }));
                     }
-                })
-                .then(() => {
-                    // Adjust window size, then optionally indicate that you’re done.
-                    trelloService.sizeTo('#caps').done();
                 });
         }
     }, [trelloService, cardState.intiallyLoaded]); // Empty dependency array so this effect runs only once.
@@ -186,6 +182,9 @@ export default function TrelloCapsPage() {
 
     const onTypeChange = (e: React.SyntheticEvent, newValue: string) => {
         setCardState({ ...cardState, ...INITIAL_STATE, selectedType: newValue });
+        if (trelloService) {
+            trelloService.sizeTo('#caps').done();
+        }
     };
 
     const _calcCaps = ({ effort, complexity, industry, selectedType, roleIndex, activityIndex, hourlyRate,
