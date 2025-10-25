@@ -17,10 +17,10 @@ const TrelloPage = () => {
           return [
             {
               icon: BLACK_ICON,
-              text: 'Caps',
+              text: 'AngoraSix',
               callback: function (t) {
                 return t.popup({
-                  title: 'Caps',
+                  title: 'AngoraSix',
                   url: '/en/trello/caps', // use i18n here
                 });
               },
