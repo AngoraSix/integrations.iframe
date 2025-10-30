@@ -23,21 +23,6 @@ const nextConfig: NextConfig = {
             key: 'Strict-Transport-Security',
             value: 'max-age=31536000; includeSubDomains; preload',
           },
-          {
-            key: 'Content-Security-Policy',
-            value: [
-              "default-src 'self'",
-              "script-src 'self' 'unsafe-inline' https://trello.com https://*.trello.com https://p.trellocdn.com",
-              "style-src 'self' 'unsafe-inline' https://trello.com https://*.trello.com https://p.trellocdn.com",
-              "img-src 'self' data: https://trello.com https://*.trello.com https://p.trellocdn.com",
-              "connect-src 'self' https://api.trello.com https://trello.com https://*.trello.com https://api.angorasix.com",
-              'frame-ancestors https://trello.com https://*.trello.com',
-              'frame-src https://trello.com https://*.trello.com',
-              "object-src 'none'",
-              "base-uri 'self'",
-              "form-action 'self' https://trello.com https://*.trello.com",
-            ].join('; '),
-          },
           { key: 'X-Content-Type-Options', value: 'nosniff' },
           { key: 'Referrer-Policy', value: 'no-referrer' },
           { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=()' }
