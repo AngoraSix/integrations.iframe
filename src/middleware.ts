@@ -8,9 +8,9 @@ function buildCsp(nonce: string) {
   return [
     "default-src 'self'",
     `script-src 'self' 'nonce-${nonce}' https://trello.com https://*.trello.com https://p.trellocdn.com`,
-    `style-src 'self' 'nonce-${nonce}' https://trello.com https://*.trello.com https://p.trellocdn.com`,
+    `style-src 'self' 'nonce-${nonce}' 'unsafe-inline' https://trello.com https://*.trello.com https://p.trellocdn.com`,
     "img-src 'self' data: https://trello.com https://*.trello.com https://p.trellocdn.com",
-    "connect-src 'self' https://api.trello.com https://trello.com https://*.trello.com https://api.angorasix.com",
+    "connect-src 'self' https://api.trello.com https://trello.com https://*.trello.com https://p.trellocdn.com https://api.angorasix.com",
     'frame-ancestors https://trello.com https://*.trello.com',
     'frame-src https://trello.com https://*.trello.com',
     "object-src 'none'",
