@@ -137,7 +137,6 @@ export default function TrelloCapsPage() {
                     moneyPayment: number;
                     caps: number;
                 }) => {
-                    console.log("Retrieved card powerup params:", capsParams);
                     if (capsParams) {
                         const { effort, complexity, industry, moneyPayment, caps } = capsParams;
                         // Use functional update to ensure you’re working with the latest state.
