@@ -1,6 +1,5 @@
 'use client';
 
-import { Typography, Box } from '@mui/material';
 import { useEffect } from 'react';
 
 const TrelloPage = () => {
@@ -57,10 +56,10 @@ const TrelloPage = () => {
   }, []);
 
   return (
-    <Box>
-      <Typography>Trello Power-Up</Typography>
-      <Typography>This is the main Power-Up entry point.</Typography>
-    </Box>
+    <div>
+      <p>Trello Power-Up</p>
+      <p>This is the main Power-Up entry point.</p>
+    </div>
   );
 };
 
