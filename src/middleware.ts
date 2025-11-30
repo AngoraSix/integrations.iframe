@@ -62,8 +62,15 @@ function generateNonce() {
 }
 
 export default function middleware(request: NextRequest) {
+  const isDev = process.env.NODE_ENV === 'development';
+
   const nonce = generateNonce();
   const response = intlMiddleware(request);
+
+  if (isDev) {
+    // Disable CSP in dev so Next.js can use eval, HMR, react-refresh, etc
+    return response;
+  }
 
   response.headers.set('Content-Security-Policy', buildCsp(nonce));
   response.headers.set(

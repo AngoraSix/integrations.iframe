@@ -13,7 +13,11 @@ const nextConfig: NextConfig = {
     // your project has ESLint errors. // TODO re-enable this later
     ignoreDuringBuilds: true,
   },
-  // webpack: (config) => {
+  // webpack: (config, { dev }) => {
+  //   if (dev) {
+  //     config.devtool = 'cheap-module-source-map';
+  //   }
+  //   return config;
   //   config.resolve.alias = {
   //     ...(config.resolve.alias || {}),
   //     react: require.resolve('react'),

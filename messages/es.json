@@ -20,8 +20,8 @@
                 "resultingCaps-perHour": "Chapitas resultantes (p/hora)",
                 "moneyPayment": "Pago en dinero",
                 "moneyPayment-perHour": "Pago en dinero (p/hora)",
-                "industry": "Modificador",
-                "industryModifier": "Modificador",
+                "industry": "Industria",
+                "industryModifier": "Modificador (e.g. Industria)",
                 "submit": "Guardar",
                 "types":{
                     "ONE_OFF": "Tarea única",

@@ -266,7 +266,7 @@ export default function TrelloCapsPage() {
                             onChange={onInputChange('moneyPayment')}
                             min="0"
                             max="1000000"
-                            step="250"
+                            step="1"
                             precision="0"
                         />
                     </div>

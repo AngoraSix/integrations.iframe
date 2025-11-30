@@ -1,6 +1,6 @@
 {
   "name": "integrations.iframe",
-  "version": "0.4.8",
+  "version": "0.4.9",
   "description": "Integrations with other third-party apps using iframes",
   "private": true,
   "scripts": {

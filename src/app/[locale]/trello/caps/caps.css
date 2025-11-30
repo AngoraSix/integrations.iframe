@@ -14,10 +14,6 @@
     color: var(--ds-text-disabled);
 }
 
-.Trello__Caps__StrategyType__Tabs .MuiTabs-indicator {
-    background-color: transparent;
-}
-
 .TypeTab.Inactive {
     background-color: var(--ds-background-disabled);
     border-color: var(--ds-border-selected);

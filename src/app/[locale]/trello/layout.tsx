@@ -2,12 +2,12 @@ import { headers } from 'next/headers';
 import Script from 'next/script';
 import './trello-power-up.css';
 
-export default function TrelloLayout({
+export default async function TrelloLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const nonce = headers().get('x-csp-nonce') ?? undefined;
+  const nonce = (await headers()).get('x-csp-nonce') ?? undefined;
 
   return (
     <>
