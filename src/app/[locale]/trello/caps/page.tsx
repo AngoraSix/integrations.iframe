@@ -1,6 +1,5 @@
 'use client';
 
-import { Tab, Tabs } from '@mui/material';
 import { useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
 import './caps.css';
@@ -103,7 +102,8 @@ const INITIAL_STATE = {
 
     effort: 0,
     complexity: 3,
-    industry: INDUSTRIES.software.key,
+    industry: '',
+    industryModifier: 1,
 
     moneyPayment: 0,
     definedCaps: 0
@@ -134,28 +134,37 @@ export default function TrelloCapsPage() {
                     effort: number;
                     complexity: number;
                     industry: string;
+                    industryModifier?: number;
                     moneyPayment: number;
                     caps: number;
                 }) => {
                     if (capsParams) {
-                        const { effort, complexity, industry, moneyPayment, caps } = capsParams;
+                        const { effort, complexity, industry, industryModifier, moneyPayment, caps } = capsParams;
+                        const resolvedIndustryModifier = (Number.isFinite(industryModifier) ? industryModifier : undefined)
+                            ?? (industry ? INDUSTRIES[industry as keyof typeof INDUSTRIES]?.value : undefined);
                         // Use functional update to ensure you’re working with the latest state.
-                        setCardState((prevState) => ({
-                            ...prevState,
-                            intiallyLoaded: true,
-                            effort,
-                            complexity,
-                            industry,
-                            moneyPayment,
-                            definedCaps: caps
-                        }));
+                        setCardState((prevState) => {
+                            const updatedState = {
+                                ...prevState,
+                                intiallyLoaded: true,
+                                effort,
+                                complexity,
+                                industry: industry ?? '',
+                                industryModifier: resolvedIndustryModifier ?? prevState.industryModifier,
+                                moneyPayment,
+                                definedCaps: caps ?? prevState.definedCaps
+                            };
+                            return { ...updatedState, definedCaps: caps ?? _calcCaps(updatedState) };
+                        });
                     }
                 });
         }
     }, [trelloService, cardState.intiallyLoaded]); // Empty dependency array so this effect runs only once.
 
     const onInputChange = (fieldName: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
-        const inputValue = e.target?.value;
+        const numericFields = ['effort', 'complexity', 'moneyPayment', 'roleIndex', 'activityIndex', 'industryModifier'];
+        const rawValue = e.target?.value;
+        const inputValue = numericFields.includes(fieldName) ? parseFloat(rawValue) : rawValue;
         const newState = { ...cardState, [fieldName]: inputValue };
         setCardState({ ...newState, definedCaps: _calcCaps(newState) });
     };
@@ -168,7 +177,9 @@ export default function TrelloCapsPage() {
                 effort: cardState.effort,
                 complexity: cardState.complexity,
                 industry: cardState.industry,
-                industryModifier: INDUSTRIES[cardState.industry as keyof typeof INDUSTRIES].value,
+                industryModifier: (Number.isFinite(cardState.industryModifier) ? cardState.industryModifier : undefined)
+                    ?? INDUSTRIES[cardState.industry as keyof typeof INDUSTRIES]?.value
+                    ?? 1,
                 moneyPayment: cardState.moneyPayment,
                 caps: cardState.definedCaps,
             }).then(function () {
@@ -179,146 +190,90 @@ export default function TrelloCapsPage() {
         }
     };
 
-    const onTypeChange = (e: React.SyntheticEvent, newValue: string) => {
-        setCardState({ ...cardState, ...INITIAL_STATE, selectedType: newValue });
-        if (trelloService) {
-            trelloService.sizeTo('#caps').done();
-        }
-    };
-
-    const _calcCaps = ({ effort, complexity, industry, selectedType, roleIndex, activityIndex, hourlyRate,
-    }: { effort: number, complexity: number, industry: string, selectedType: string, roleIndex: number, activityIndex: number, hourlyRate: number }) => {
+    const _calcCaps = ({ effort, complexity, industry, industryModifier, selectedType, roleIndex, activityIndex, hourlyRate,
+    }: { effort: number, complexity: number, industry: string, industryModifier?: number, selectedType: string, roleIndex: number, activityIndex: number, hourlyRate: number }) => {
+        const resolvedModifier = (Number.isFinite(industryModifier) ? industryModifier : undefined)
+            ?? (industry ? INDUSTRIES[industry as keyof typeof INDUSTRIES]?.value : undefined)
+            ?? 1;
         return (selectedType === TASK_TYPES.ONE_OFF.key)
-            ? (effort / CREDIT_RATIO) * (complexity / AVG_COMPLEXITY) * INDUSTRIES[industry as keyof typeof INDUSTRIES].value
+            ? (effort / CREDIT_RATIO) * (complexity / AVG_COMPLEXITY) * resolvedModifier
             : ROLES_ACTIVITIES_MAPPNIGS[roleIndex].activities[activityIndex].hourlyCaps;
     };
-
-    const isContinuousActivity = cardState.selectedType === TASK_TYPES.CONTINUOUS_ACTIVITY.key;
 
     return (
         <div id='caps' className='Trello__Caps Container'>
             <form className='Form' id="caps" onSubmit={onSubmit}>
-                <Tabs
-                    variant="fullWidth"
-                    className='Trello__Caps__StrategyType__Tabs'
-                    value={cardState.selectedType}
-                    onChange={onTypeChange}
-                    aria-label="basic tabs example">
-                    {Object.keys(TASK_TYPES).map(type => (
-                        <Tab key={type}
-                            value={TASK_TYPES[type].key}
-                            id={`type-tab${type}`}
-                            label={t(`caps.form.types.${type}`)}
-                            className={`TypeTab ${type === cardState.selectedType ? 'Active' : 'Inactive'}`} />))}
-                </Tabs>
-                {isContinuousActivity
-                    ? (<div key={TASK_TYPES.CONTINUOUS_ACTIVITY.key} className={`Fields__Container`}>
-                        <div key="role"
-                            id="role" className="InputField Role">
-                            <p
-                                className="Label" id="role-label">{t('caps.form.role')}</p>
-                            <select
-                                id="role"
-                                className="Input"
-                                value={cardState.roleIndex}
-                                onChange={onInputChange('roleIndex')}
-                            >
-                                {ROLES_ACTIVITIES_MAPPNIGS.map((r, i) => (<option key={i} value={i}>{r.label}</option>))}
-                            </select>
-                        </div>
-                        <div key="activity"
-                            id="activity" className="InputField Role">
-                            <p
-                                className="Label" id="activity-label">{t('caps.form.activity')}</p>
-                            <select
-                                id="activity"
-                                className="Input"
-                                value={cardState.activityIndex}
-                                onChange={onInputChange('activityIndex')}
-                            >
-                                {ROLES_ACTIVITIES_MAPPNIGS[cardState.roleIndex].activities.map((a, i) => (<option key={i} value={i}>{a.label}</option>))}
-                            </select>
-                        </div>
-                        <div key="moneyPayment-perHour"
-                            id="moneyPayment-perHour" className="InputField MoneyPayment__PerHour">
-                            <p
-                                className="Label" id="moneyPayment-perHour-label">{t('caps.form.moneyPayment-perHour')}</p>
-                            <input
-                                className="Input"
-                                id="moneyPayment-perHour"
-                                disabled
-                                value={ROLES_ACTIVITIES_MAPPNIGS[cardState.roleIndex].activities[cardState.activityIndex].hourlyRate}
-                            />
-                        </div>
-                    </div>)
-                    : (<div key={TASK_TYPES.ONE_OFF.key} className={`Fields__Container`}>
-                        <div key="effort" id="effort" className="InputField Effort">
-                            <p
-                                className="Label" id="effort-label">{t('caps.form.effort')}</p>
-                            <input
-                                type="number"
-                                className="Input"
-                                id="effort"
-                                value={cardState.effort}
-                                onChange={onInputChange('effort')}
-                                min="0"
-                                max="30"
-                                step="0.5"
-                                precision="1"
-                            />
-                        </div >
+                <div key={TASK_TYPES.ONE_OFF.key} className={`Fields__Container`}>
+                    <div key="effort" id="effort" className="InputField Effort">
+                        <p
+                            className="Label" id="effort-label">{t('caps.form.effort')}</p>
+                        <input
+                            type="number"
+                            className="Input"
+                            id="effort"
+                            value={cardState.effort}
+                            onChange={onInputChange('effort')}
+                            min="0"
+                            max="30"
+                            step="0.5"
+                            precision="1"
+                        />
+                    </div >
 
-                        <div key="complexity"
-                            id="complexity" className="InputField Complexity">
-                            <p
-                                className="Label" id="complexity-label">{t('caps.form.complexity')}</p>
-                            <input
-                                type="number"
-                                className="Input"
-                                id="complexity"
-                                value={cardState.complexity}
-                                onChange={onInputChange('complexity')}
-                                min="1"
-                                max="5"
-                                step="1"
-                                precision="0"
-                            />
-                        </div>
+                    <div key="complexity"
+                        id="complexity" className="InputField Complexity">
+                        <p
+                            className="Label" id="complexity-label">{t('caps.form.complexity')}</p>
+                        <input
+                            type="number"
+                            className="Input"
+                            id="complexity"
+                            value={cardState.complexity}
+                            onChange={onInputChange('complexity')}
+                            min="1"
+                            max="5"
+                            step="1"
+                            precision="0"
+                        />
+                    </div>
 
-                        <div key="industry"
-                            id="industry" className="InputField Industry">
-                            <p
-                                className="Label" id="industry-label">{t('caps.form.industry')}</p>
-                            <select
-                                id="industry"
-                                className="Input"
-                                value={cardState.industry}
-                                onChange={onInputChange('industry')}
-                            >
-                                {Object.keys(INDUSTRIES).map((key) => (<option key={key} value={key}>{t(`caps.form.industries.${key}`)}</option>))}
-                            </select>
-                        </div>
+                    <div key="industryModifier"
+                        id="industryModifier" className="InputField Industry">
+                        <p
+                            className="Label" id="industryModifier-label">{t('caps.form.industryModifier')}</p>
+                        <input
+                            type="number"
+                            className="Input"
+                            id="industryModifier"
+                            value={cardState.industryModifier}
+                            onChange={onInputChange('industryModifier')}
+                            min="0.25"
+                            max="3"
+                            step="0.25"
+                            precision="2"
+                        />
+                    </div>
 
-                        <div key="moneyPayment"
-                            id="moneyPayment" className="InputField MoneyPayment">
-                            <p
-                                className="Label" id="moneyPayment-label">{t('caps.form.moneyPayment')}</p>
-                            <input
-                                type="number"
-                                className="Input"
-                                id="moneyPayment"
-                                value={cardState.moneyPayment}
-                                onChange={onInputChange('moneyPayment')}
-                                min="0"
-                                max="1000000"
-                                step="250"
-                                precision="0"
-                            />
-                        </div>
-                    </div>)}
+                    <div key="moneyPayment"
+                        id="moneyPayment" className="InputField MoneyPayment">
+                        <p
+                            className="Label" id="moneyPayment-label">{t('caps.form.moneyPayment')}</p>
+                        <input
+                            type="number"
+                            className="Input"
+                            id="moneyPayment"
+                            value={cardState.moneyPayment}
+                            onChange={onInputChange('moneyPayment')}
+                            min="0"
+                            max="1000000"
+                            step="250"
+                            precision="0"
+                        />
+                    </div>
+                </div>
                 <div key="caps" id="resultingCaps" className="InputField">
                     <p
-                        className="Label" id="resultingCaps-label">{t(`caps.form.resultingCaps${isContinuousActivity ? '-perHour' : ''}`)}</p>
+                        className="Label" id="resultingCaps-label">{t('caps.form.resultingCaps')}</p>
                     <input
                         className="Input"
                         id="resultingCaps"

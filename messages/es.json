@@ -21,6 +21,7 @@
                 "moneyPayment": "Pago en dinero",
                 "moneyPayment-perHour": "Pago en dinero (p/hora)",
                 "industry": "Modificador",
+                "industryModifier": "Modificador",
                 "submit": "Guardar",
                 "types":{
                     "ONE_OFF": "Tarea única",

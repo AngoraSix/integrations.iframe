@@ -21,6 +21,7 @@
                 "moneyPayment": "Money Payment",
                 "moneyPayment-perHour": "Money Payment (p/hour)",
                 "industry": "Industry",
+                "industryModifier": "Modifier",
                 "submit": "Submit Changes",
                 "types":{
                     "ONE_OFF": "One-Off Task",
